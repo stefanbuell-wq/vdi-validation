@@ -529,7 +529,85 @@ def create_presentation():
                              color=txt_color, fill_color=bg, alignment=align)
 
     # ============================================================
-    # SLIDE 15: Section Divider — Datenschutz
+    # SLIDE 15: Zusätzliche Hardware-Investitionen (PoC, Migration, GPU)
+    # ============================================================
+    slide = prs.slides.add_slide(prs.slide_layouts[LY_ONLY_TITLE])
+    for ph in slide.placeholders:
+        if ph.placeholder_format.idx == 0:
+            ph.text = "Zusätzliche Hardware-Investitionen"
+        elif ph.placeholder_format.idx == 15:
+            ph.text = "Separat zu kalkulieren: Test-/PoC-Hardware, Migrations-Hardware, GPU-Ausstattung"
+
+    # Three-column table: PoC | Migration | GPU
+    hw_headers = ["Kostenblock", "Beschreibung", "Geschätzte Kosten", "Status"]
+    hw_data = [
+        ["Test-/PoC-Hardware",
+         "Dedizierte Server (2–4 Hosts/Lösung),\nStorage, Netzwerk, Test-Endgeräte\nfür PoC mit 2–3 Lösungen",
+         "65.000–190.000 €\n(einmalig, in Produktion\nüberführbar)",
+         "Zu beschaffen"],
+        ["Migrations-Hardware\n(Parallelbetrieb)",
+         "Zusätzliche Kapazität während\nMigration (Alt- + Neusystem parallel)\nBei phasenweiser Migration: 15–30 %",
+         "300.000–600.000 €\n(phasenweise, 7.000 User)\nBig Bang: 1,5–3,0 Mio. €",
+         "Menge noch zu\nbestimmen"],
+        ["GPU-Hardware\n(falls benötigt)",
+         "vGPU-Karten (z.B. NVIDIA A16/L4)\n+ GPU-fähige Server-Hosts\n+ NVIDIA vGPU-Lizenzen",
+         "Bei 10 % GPU-Nutzern:\n~280.000–468.000 € (5 J.)\nOhne GPU: 0 €",
+         "Bedarfsanalyse\nerforderlich"],
+    ]
+
+    n_rows = len(hw_data) + 1
+    left, top = Cm(1.5), Cm(3.5)
+    width, height = Cm(30.5), Cm(1.3 * n_rows)
+    table = add_table(slide, n_rows, 4, left, top, width, height)
+    set_column_widths(table, [5.5, 9, 8, 5])
+    style_header_row(table, hw_headers)
+
+    status_colors = {
+        "Zu beschaffen": AOK_ORANGE,
+        "Menge noch zu\nbestimmen": AOK_RED,
+        "Bedarfsanalyse\nerforderlich": AOK_RED,
+    }
+
+    for r, row_data in enumerate(hw_data):
+        bg = RGBColor(0xF0, 0xF7, 0xF0) if r % 2 == 0 else None
+        for c, cell_text in enumerate(row_data):
+            bold = c == 0
+            align = PP_ALIGN.LEFT
+            txt_color = AOK_DARK_GRAY
+            if c == 3:  # Status column
+                txt_color = status_colors.get(cell_text, AOK_DARK_GRAY)
+                bold = True
+                align = PP_ALIGN.CENTER
+            elif c == 2:  # Cost column
+                align = PP_ALIGN.RIGHT
+                bold = True
+            style_table_cell(table.cell(r + 1, c), cell_text, size=9, bold=bold,
+                             color=txt_color, fill_color=bg, alignment=align)
+
+    # Add note below table
+    from pptx.util import Cm as CmUtil
+    txBox = slide.shapes.add_textbox(Cm(1.5), Cm(3.5 + 1.3 * n_rows + 0.5), Cm(30.5), Cm(2.5))
+    tf = txBox.text_frame
+    tf.word_wrap = True
+    p = tf.paragraphs[0]
+    run = p.add_run()
+    run.text = "Offene Fragen:"
+    set_font(run, size=11, bold=True, color=AOK_RED)
+
+    questions = [
+        "Wird GPU-Power benötigt? → Benutzerprofilanalyse durchführen (CAD, GIS, PACS, Multimedia, KI)",
+        "Welche Migrationsstrategie? → Bestimmt Menge der Migrations-Hardware (Big Bang vs. phasenweise)",
+        "Kann PoC-Hardware in Produktion übernommen werden? → Bei Beschaffung auf Prod-Eignung achten",
+    ]
+    for q in questions:
+        p = tf.add_paragraph()
+        p.space_after = Pt(2)
+        run = p.add_run()
+        run.text = f"• {q}"
+        set_font(run, size=10, color=AOK_DARK_GRAY)
+
+    # ============================================================
+    # SLIDE 16: Section Divider — Datenschutz
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_SECTION_GREEN])
     for ph in slide.placeholders:
@@ -539,7 +617,7 @@ def create_presentation():
             ph.text = "DSGVO, BSI, Schrems-II, CLOUD Act"
 
     # ============================================================
-    # SLIDE 16: Data Sovereignty Assessment
+    # SLIDE 17: Data Sovereignty Assessment
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_ONLY_TITLE])
     for ph in slide.placeholders:
@@ -588,7 +666,7 @@ def create_presentation():
                              fill_color=bg, alignment=align)
 
     # ============================================================
-    # SLIDE 17: Datenschutz Empfehlungen
+    # SLIDE 18: Datenschutz Empfehlungen
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_CONTENT])
     for ph in slide.placeholders:
@@ -629,7 +707,7 @@ def create_presentation():
                 set_font(run_t, size=12, color=AOK_DARK_GRAY)
 
     # ============================================================
-    # SLIDE 18: Section Divider — Vergaberecht
+    # SLIDE 19: Section Divider — Vergaberecht
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_SECTION_GREEN])
     for ph in slide.placeholders:
@@ -639,7 +717,7 @@ def create_presentation():
             ph.text = "EU-Schwellenwerte, VgV, UVgO, EVB-IT"
 
     # ============================================================
-    # SLIDE 19: Vergaberecht
+    # SLIDE 20: Vergaberecht
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_TWO_COL])
     for ph in slide.placeholders:
@@ -708,7 +786,7 @@ def create_presentation():
                 set_font(run, size=10, bold=bold, color=AOK_RED if bold else AOK_DARK_GRAY)
 
     # ============================================================
-    # SLIDE 20: Ausschreibungshinweise
+    # SLIDE 21: Ausschreibungshinweise
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_CONTENT])
     for ph in slide.placeholders:
@@ -748,7 +826,7 @@ def create_presentation():
                     set_font(run, size=13, color=AOK_DARK_GRAY)
 
     # ============================================================
-    # SLIDE 21: Section Divider — Empfehlung
+    # SLIDE 22: Section Divider — Empfehlung
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_SECTION_GREEN])
     for ph in slide.placeholders:
@@ -758,7 +836,7 @@ def create_presentation():
             ph.text = "Gewichtete Bewertungsmatrix"
 
     # ============================================================
-    # SLIDE 22: Scoring Matrix
+    # SLIDE 23: Scoring Matrix
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_ONLY_TITLE])
     for ph in slide.placeholders:
@@ -818,7 +896,7 @@ def create_presentation():
                              color=txt_color, fill_color=bg, alignment=align)
 
     # ============================================================
-    # SLIDE 23: Ranking & Recommendation
+    # SLIDE 24: Ranking & Recommendation
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_CONTENT])
     for ph in slide.placeholders:
@@ -860,7 +938,7 @@ def create_presentation():
                 set_font(run, size=12, color=AOK_GRAY)
 
     # ============================================================
-    # SLIDE 24: Handlungsempfehlung
+    # SLIDE 25: Handlungsempfehlung
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_CONTENT])
     for ph in slide.placeholders:
@@ -902,7 +980,7 @@ def create_presentation():
                 set_font(run2, size=13, color=AOK_DARK_GRAY)
 
     # ============================================================
-    # SLIDE 25: Next Steps
+    # SLIDE 26: Next Steps
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_CONTENT])
     for ph in slide.placeholders:
@@ -916,12 +994,12 @@ def create_presentation():
 
             steps = [
                 ("1.", "Anforderungsanalyse", "7.000 Desktops: Nutzerprofile, Anwendungslandschaft, Performance-Klassen definieren"),
-                ("2.", "Datenschutz-Folgenabschätzung (DSFA)", "Durchführung für favorisierte Lösungen"),
-                ("3.", "Proof of Concept (PoC)", "Pilotierung mit 2-3 favorisierten Lösungen"),
-                ("4.", "Abstimmung mit dem DSB", "Datenschutzbeauftragten einbeziehen"),
-                ("5.", "Marktrecherche (§ 28 VgV)", "Markterkundung und Lieferantengespräche"),
-                ("6.", "Vergabeunterlage erstellen", "Funktionale Leistungsbeschreibung"),
-                ("7.", "EU-weite Ausschreibung", "Bei 7.000 Desktops zwingend erforderlich (TCO >> Schwellenwert)"),
+                ("2.", "Benutzerprofilanalyse GPU", "Klären: Wie viele Nutzer benötigen GPU-Power? (CAD, GIS, PACS, Multimedia, KI)"),
+                ("3.", "Test-/PoC-Hardware beschaffen", "Dedizierte Hardware für Proof of Concept (ca. 65.000–190.000 €)"),
+                ("4.", "Proof of Concept (PoC)", "Pilotierung mit 2–3 favorisierten Lösungen"),
+                ("5.", "Migrationsstrategie festlegen", "Parallelbetrieb-Kapazität und Migrations-Hardware bestimmen"),
+                ("6.", "DSFA + Abstimmung mit DSB", "Datenschutz-Folgenabschätzung und Datenschutzbeauftragten einbeziehen"),
+                ("7.", "Marktrecherche + EU-Ausschreibung", "Markterkundung (§ 28 VgV), dann EU-weite Vergabe (TCO >> Schwellenwert)"),
             ]
 
             for i, (num, title, desc) in enumerate(steps):

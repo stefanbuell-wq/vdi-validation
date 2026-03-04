@@ -400,6 +400,107 @@ Proxmox Virtual Environment (VE) ist eine Open-Source-Virtualisierungsplattform 
 > - VMware-Kosten sind nach Broadcom-Übernahme besonders schwer vorherzusagen.
 > - Personalkosten für Open Source sind tendenziell höher (Know-how-Aufbau).
 > - Windows-Lizenzen fallen bei allen Lösungen an, wenn Windows-Desktops benötigt werden.
+> - **Die nachfolgenden zusätzlichen Hardware-Kostenblöcke (PoC, Migration, GPU) sind in der obigen TCO-Tabelle noch NICHT enthalten und müssen separat kalkuliert werden.**
+
+### 5.1 Zusätzliche Hardware-Kostenblöcke (separat zu kalkulieren)
+
+Die oben dargestellte TCO-Schätzung bildet den laufenden Betrieb ab. Drei wesentliche Hardware-Investitionen fallen **zusätzlich** an und müssen in der Gesamtplanung separat berücksichtigt werden:
+
+#### 5.1.1 Test- und PoC-Hardware
+
+Für eine fundierte Evaluierung (Proof of Concept) mit 2–3 favorisierten Lösungen muss **dedizierte Test-Hardware** beschafft werden. Produktivsysteme dürfen für Tests nicht zweckentfremdet werden.
+
+| Kostenposition | Schätzung |
+|----------------|-----------|
+| Server-Hosts (2–4 Hosts pro PoC-Lösung) | ca. 40.000–120.000 € |
+| Storage (Shared Storage / SSD) | ca. 10.000–30.000 € |
+| Netzwerk (Switches, ggf. 10/25 GbE) | ca. 5.000–15.000 € |
+| Thin Clients / Test-Endgeräte (20–50 Stück) | ca. 10.000–25.000 € |
+| **Gesamt PoC-Hardware** | **ca. 65.000–190.000 €** |
+
+> **Hinweis:** Die PoC-Hardware kann bei positivem Ergebnis in die Produktivumgebung überführt werden. Bei der Beschaffung sollte daher auf Produktionseignung geachtet werden (gleiche Modelle/Spezifikationen wie geplante Produktion).
+
+#### 5.1.2 Migrations-Hardware (Parallelbetrieb)
+
+Während der Migration von der bestehenden Infrastruktur auf die neue VDI-Lösung müssen **beide Systeme parallel betrieben** werden. Je nach Migrationsstrategie ist zusätzliche Hardware in erheblichem Umfang erforderlich.
+
+| Migrationsstrategie | Zusätzliche Hardware | Dauer | Risikoeinschätzung |
+|---------------------|---------------------|-------|-------------------|
+| **Big Bang** (alle 7.000 gleichzeitig) | 100 % Zusatzkapazität | 1 Wochenende | Sehr hohes Risiko |
+| **Phasenweise** (1.000–2.000 pro Welle) | 15–30 % Zusatzkapazität | 3–6 Monate | Mittleres Risiko |
+| **Rollierend** (Abteilung für Abteilung) | 10–20 % Zusatzkapazität | 6–12 Monate | Geringes Risiko |
+
+**Geschätzte Migrations-Hardwarekosten bei 7.000 Desktops:**
+
+| Strategie | Zusätzliche Server | Geschätzte Kosten |
+|-----------|-------------------|-------------------|
+| Big Bang | ~80–120 Hosts (voller Parallelbetrieb) | ca. 1,5–3,0 Mio. € |
+| Phasenweise | ~15–30 Hosts | ca. 300.000–600.000 € |
+| Rollierend | ~10–20 Hosts | ca. 200.000–400.000 € |
+
+> **Empfehlung:** Für eine Einrichtung mit 7.000 Desktops wird die **phasenweise Migration** empfohlen. Big Bang ist bei dieser Größenordnung zu riskant, rollierend dauert zu lange. Die exakte Menge der benötigten Migrations-Hardware muss im Rahmen der Anforderungsanalyse bestimmt werden.
+
+> **Offener Punkt:** Die genaue Anzahl der benötigten Migrations-Hosts hängt ab von:
+> - Anzahl und Größe der Migrationswellen
+> - Akzeptierter Parallelbetriebsdauer
+> - Rückfallstrategie (Rollback-Kapazität)
+> - Bestehende Hardware, die weiterverwendet werden kann
+
+#### 5.1.3 GPU-Anforderungen
+
+Eine zentrale offene Frage ist, ob und in welchem Umfang **GPU-Rechenleistung** benötigt wird. Dies beeinflusst sowohl die Hardware-Spezifikation als auch die Kosten erheblich.
+
+**Typische GPU-Anwendungsfälle in VDI-Umgebungen:**
+
+| Anwendungsfall | GPU-Bedarf | Typische GPU-Klasse |
+|----------------|-----------|---------------------|
+| Standard-Office (Word, Excel, Browser) | Kein oder minimal | Keine (CPU-Rendering genügt) |
+| Erweiterte Grafik (PowerBI-Dashboards, Präsentationen) | Niedrig | vGPU (shared, 1–2 GB VRAM) |
+| CAD/CAM (AutoCAD, SolidWorks, GIS) | Mittel-Hoch | vGPU (4–8 GB VRAM, z.B. NVIDIA A16/L4) |
+| Medizinische Bildgebung / PACS | Hoch | vGPU (8–16 GB VRAM, z.B. NVIDIA A40/L40) |
+| KI/ML-Workloads, Video-Rendering | Sehr hoch | Dedizierte GPU (NVIDIA A100/H100) |
+| Multimedia/Videokonferenzen (Teams, Zoom) | Niedrig-Mittel | Hardware-Encoding (GPU-assisted, z.B. NVIDIA NVENC) |
+
+**Kostenabschätzung GPU-Hardware:**
+
+| GPU-Modell | Einsatz | Ca. Preis/Karte | Max. vGPU-User/Karte |
+|------------|---------|-----------------|----------------------|
+| NVIDIA A2 (16 GB) | Einstieg/Office+ | ca. 1.500–2.500 € | 8–16 User |
+| NVIDIA A16 (4×16 GB) | VDI-Standard | ca. 4.000–6.000 € | 32–64 User |
+| NVIDIA L4 (24 GB) | VDI/leichtes CAD | ca. 3.000–5.000 € | 16–32 User |
+| NVIDIA A40 (48 GB) | CAD/Imaging | ca. 5.000–8.000 € | 8–16 User |
+| NVIDIA L40 (48 GB) | CAD/AI | ca. 7.000–10.000 € | 8–16 User |
+
+> **Achtung:** Neben der GPU-Hardware fallen **zusätzliche vGPU-Lizenzkosten** (NVIDIA) an:
+> - **NVIDIA vPC** (Virtual PC): ca. 2,50–4,00 €/User/Monat — für Standard-Desktop-Beschleunigung
+> - **NVIDIA vWS** (Virtual Workstation): ca. 5,00–8,00 €/User/Monat — für professionelle Grafik (CAD, etc.)
+> - **Bei 7.000 Usern (nur vPC):** ca. 210.000–336.000 €/Jahr zusätzliche Lizenzkosten
+
+**Rechenbeispiel: GPU-Kosten bei 10 % GPU-Nutzern (700 von 7.000):**
+
+| Position | Kosten |
+|----------|--------|
+| GPU-Hardware (z.B. 25× NVIDIA A16) | ca. 100.000–150.000 € |
+| GPU-Server (zusätzliche Hosts mit GPU-Slots) | ca. 75.000–150.000 € |
+| NVIDIA vPC-Lizenzen (700 User × 5 Jahre) | ca. 105.000–168.000 € |
+| **Gesamt GPU-Zusatzkosten (5 Jahre)** | **ca. 280.000–468.000 €** |
+
+> **Empfehlung:** Vor der Hardware-Planung muss eine **Benutzerprofilanalyse** durchgeführt werden, die klärt:
+> 1. Wie viele Nutzer benötigen GPU-Beschleunigung?
+> 2. Welche Anwendungen erfordern GPU? (CAD, GIS, PACS, Multimedia?)
+> 3. Genügt geteilte vGPU oder werden dedizierte GPUs benötigt?
+> 4. Werden GPUs auch für Hardware-Encoding bei Videokonferenzen genutzt?
+
+**GPU-Support nach VDI-Lösung:**
+
+| Lösung | vGPU-Support | Einschränkungen |
+|--------|-------------|-----------------|
+| **RDS** | Eingeschränkt (DDA ab Server 2025) | Kein echtes vGPU-Sharing nativ |
+| **Azure Local** | Ja (GPU-VMs über Azure Arc) | Erfordert GPU-fähige HCI-Knoten |
+| **AVD (Cloud)** | Ja (NVv4/NCasT4-VMs in Azure) | Verbrauchsbasiert, hohe laufende Kosten |
+| **Omnissa Horizon** | Ja (Blast + NVIDIA vGPU) | Bester vGPU-Support im Markt |
+| **OpenDesktop** | Möglich (KVM GPU-Passthrough/Mediated) | Manuell, kein Enterprise-Management |
+| **Proxmox + UDS** | Möglich (PCIe-Passthrough, Mediated) | vGPU-Support in Entwicklung, kein offizieller NVIDIA-Support |
 
 ---
 
@@ -602,8 +703,11 @@ Die aktualisierten EU-Schwellenwerte gelten seit dem 1. Januar 2026 (veröffentl
 ### Nächste Schritte
 
 - [ ] Anforderungsanalyse: Exakte Nutzerzahl, Anwendungslandschaft, Performance-Anforderungen definieren
+- [ ] **Benutzerprofilanalyse GPU:** Klären, wie viele Nutzer GPU-Beschleunigung benötigen (CAD, GIS, PACS, Multimedia, KI)
+- [ ] **Test-/PoC-Hardware beschaffen:** Dedizierte Infrastruktur für Proof of Concept (ca. 65.000–190.000 €, ggf. in Produktion überführbar)
+- [ ] Proof of Concept (PoC) mit 2–3 favorisierten Lösungen
+- [ ] **Migrationsstrategie festlegen:** Phasenweise vs. Big Bang — bestimmt Menge der benötigten Migrations-Hardware
 - [ ] Datenschutz-Folgenabschätzung (DSFA) durchführen
-- [ ] Proof of Concept (PoC) mit 2-3 favorisierten Lösungen
 - [ ] Abstimmung mit dem Datenschutzbeauftragten
 - [ ] Marktrecherche und -erkundung (§ 28 VgV)
 - [ ] Vergabeunterlage erstellen (funktionale Leistungsbeschreibung)
