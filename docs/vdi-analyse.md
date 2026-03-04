@@ -21,6 +21,7 @@
 5. [Kostenvergleich (TCO-Schätzung)](#5-kostenvergleich)
 6. [Datenschutz und IT-Sicherheit](#6-datenschutz-und-it-sicherheit)
 7. [Vergaberechtliche Aspekte](#7-vergaberechtliche-aspekte)
+7a. [Exkurs: 200 %-Unabhängigkeit](#7a-exkurs-200--unabhängigkeit)
 8. [Empfehlung und Fazit](#8-empfehlung-und-fazit)
 
 ---
@@ -36,6 +37,7 @@ Diese Analyse vergleicht sechs VDI-Lösungen hinsichtlich Funktionalität, Koste
 - **VMware Horizon** wurde als EUC-Sparte an KKR verkauft und firmiert seit Juli 2024 als **Omnissa** — die Zukunft der Plattform ist im Umbruch.
 - **Vergaberecht** erfordert bei allen Lösungen ab dem EU-Schwellenwert (216.000 € netto seit 01.01.2026) eine europaweite Ausschreibung.
 - **Deutsche Verwaltungscloud (DVC)** ist seit April 2025 produktiv — DVC-kompatible Lösungen bieten vereinfachte Beschaffungswege.
+- **200 %-Unabhängigkeit** (d.h. vollständige Herstellerunabhängigkeit bei gleichzeitiger Redundanz) ist ein strategisches Ziel, das unabhängig von der konkreten Produktauswahl diskutiert werden sollte — siehe separater Abschnitt.
 
 ---
 
@@ -49,6 +51,22 @@ Diese Analyse vergleicht sechs VDI-Lösungen hinsichtlich Funktionalität, Koste
 | VMware Horizon (Omnissa) | On-Premises / Hybrid | Omnissa (ehem. VMware/Broadcom, seit 07/2024 KKR) | Proprietär (Subscription) |
 | OpenDesktop | On-Premises | Community / diverse | Open Source |
 | Proxmox + UDS Enterprise | On-Premises | Proxmox Server Solutions / VirtualCable | Open Source + kommerziell |
+
+### VDI-Bereitstellungsmodelle
+
+Der Begriff „VDI" umfasst verschiedene Bereitstellungsmodelle, die in der Praxis häufig kombiniert werden:
+
+| Modell | Beschreibung | Beispiel |
+|--------|-------------|----------|
+| **Desktop-basierte VDI** | Ein dedizierter Desktop läuft in einer eigenen virtuellen Maschine auf einem Server im Rechenzentrum. Jeder Nutzer erhält seinen eigenen Desktop. | Proxmox + UDS, Omnissa Horizon, Citrix Virtual Desktops |
+| **Serverbasierte VDI (Remote-PC)** | Ein Desktop läuft in einem Serverbetriebssystem, das jeweils nur für einen einzelnen Benutzer verfügbar ist. | Citrix Remote PC Access, physische Workstations per Remoting |
+| **Sitzungsbasierte VDI** | Mehrere Benutzer teilen sich ein Serverbetriebssystem — jeder Nutzer erhält eine eigene Sitzung auf einem gemeinsamen Server. | Windows RDS, Citrix Virtual Apps |
+
+> **Wichtig:** Bei der aktuellen Infrastruktur werden ca. 1.400 Worker Server für sitzungsbasierte Desktops betrieben. Bei einer Umstellung auf desktop-basierte VDI könnten alternativ auch individuelle Workstation-VMs (potenziell bis zu 8.000 Desktops) bereitgestellt werden — mit dem Vorteil dedizierter Ressourcen und besserer Applikationskompatibilität, aber höherem Ressourcenbedarf pro Nutzer.
+
+### Citrix als VDI-Plattform
+
+Die bestehende Citrix-Umgebung kann **nicht nur sitzungsbasierte Desktops** (Virtual Apps / XenApp), sondern **auch vollwertige Desktop-VDI** (Virtual Desktops / XenDesktop) bereitstellen. Citrix deckt damit alle drei oben genannten Bereitstellungsmodelle ab. Dies ist relevant für die Bewertung der Ablösestrategie: Ein Wechsel der VDI-Lösung bedeutet nicht zwingend einen Wechsel des Bereitstellungsmodells — und umgekehrt kann auch innerhalb von Citrix auf ein anderes Modell umgestellt werden, bevor eine vollständige Ablösung erfolgt.
 
 ---
 
@@ -75,6 +93,7 @@ Microsoft Remote Desktop Services (RDS) ist die klassische Terminal-Server-Lösu
 - **Lizenzkosten steigen:** CAL-Modell wird bei wachsender Nutzerzahl teuer
 - **End of Mainstream Support:** Windows Server 2019 RDS: 2024, Windows Server 2022 RDS: 2026 — regelmäßige Migration nötig
 - **Kein modernes Management:** Fehlende zentrale Management-Konsole im Vergleich zu dedizierten VDI-Lösungen
+- **RDS ohne Citrix ist aufwendig:** Die reine Microsoft-RDS-Umgebung ohne vorgelagerten Connection Broker wie Citrix erfordert erheblichen manuellen Konfigurationsaufwand für Load Balancing, Session Management, Druckerverwaltung und Monitoring. Viele Funktionen, die Citrix „out of the box" liefert, müssen bei purem RDS einzeln implementiert oder über Drittanbieter-Tools ergänzt werden.
 
 #### Kosten (Schätzung für 100 Benutzer)
 
@@ -395,6 +414,7 @@ Proxmox Virtual Environment (VE) ist eine Open-Source-Virtualisierungsplattform 
 | **TCO pro User/Jahr** | **~510 €** | **~1.250 €** | **~1.240 €** | **~1.350 €** | **~740 €** | **~650 €** |
 
 > **Wichtige Anmerkungen:**
+> - **Alle Preise und Kosten sind vorläufige Schätzwerte.** Die konkreten Konditionen werden mit dem Einkauf abgestimmt und können je nach Rahmenverträgen, Verhandlungsergebnis und Konfiguration erheblich abweichen.
 > - Diese Schätzungen sind Richtwerte und müssen für die spezifische Situation angepasst werden.
 > - RDS ist am günstigsten, bietet aber keine echte VDI (sitzungsbasiert).
 > - AVD-Kosten können durch Reserved Instances und Multi-Session um 30–50 % gesenkt werden.
@@ -666,6 +686,24 @@ Die aktualisierten EU-Schwellenwerte gelten seit dem 1. Januar 2026 (veröffentl
 
 ---
 
+## 7a. Exkurs: 200 %-Unabhängigkeit
+
+Die Frage der „200 %-Unabhängigkeit" — also der vollständigen Herstellerunabhängigkeit bei gleichzeitiger Redundanz — ist ein strategisches Thema, das unabhängig von der konkreten Produktauswahl diskutiert werden kann und sollte.
+
+**Kernfrage:** Soll die Organisation in der Lage sein, bei einem Ausfall oder einer unvorteilhaften Veränderung eines Anbieters (Preiserhöhung, Abkündigung, Übernahme) den vollständigen Betrieb auf eine alternative Lösung umzustellen?
+
+| Aspekt | Beschreibung |
+|--------|-------------|
+| **Strategie A: Single-Vendor** | Eine VDI-Lösung für alle Nutzer. Geringerer Betriebsaufwand, aber volles Abhängigkeitsrisiko. |
+| **Strategie B: Dual-Vendor** | Zwei VDI-Lösungen parallel (z.B. Proxmox + UDS für 80 % und RDS als Fallback für 20 %). Höherer Betriebsaufwand, aber Wechseloption. |
+| **Strategie C: Abstraktion** | Ein herstellerunabhängiger Connection Broker (z.B. UDS Enterprise), der mehrere Hypervisoren bedienen kann. Wechsel des Hypervisors ohne Wechsel der Managementschicht. |
+
+> **Empfehlung:** Strategie C bietet das beste Verhältnis aus Aufwand und Unabhängigkeit. UDS Enterprise unterstützt Proxmox, oVirt, VMware, Hyper-V, Citrix und OpenStack — ein Hypervisor-Wechsel ist damit ohne Neubeschaffung des Connection Brokers möglich.
+
+> **Hinweis:** Die Diskussion zur 200 %-Unabhängigkeit sollte in einem eigenen Workshop geführt werden, da sie weitreichende strategische und budgetäre Konsequenzen hat.
+
+---
+
 ## 8. Empfehlung und Fazit
 
 ### Bewertungsmatrix (gewichtet)
@@ -712,6 +750,8 @@ Die aktualisierten EU-Schwellenwerte gelten seit dem 1. Januar 2026 (veröffentl
 - [ ] Abstimmung mit dem Datenschutzbeauftragten
 - [ ] Marktrecherche und -erkundung (§ 28 VgV)
 - [ ] Vergabeunterlage erstellen (funktionale Leistungsbeschreibung)
+- [ ] **Preise und Kosten mit dem Einkauf abstimmen** — aktuelle Rahmenverträge und Konditionen einbeziehen
+- [ ] **200 %-Unabhängigkeit in separatem Workshop diskutieren** — strategische Entscheidung zur Vendor-Diversifizierung
 - [ ] Europaweite Ausschreibung (sofern Schwellenwert überschritten)
 
 ---
