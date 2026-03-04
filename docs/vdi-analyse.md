@@ -21,7 +21,7 @@
 5. [Kostenvergleich (TCO-Schätzung)](#5-kostenvergleich)
 6. [Datenschutz und IT-Sicherheit](#6-datenschutz-und-it-sicherheit)
 7. [Vergaberechtliche Aspekte](#7-vergaberechtliche-aspekte)
-7a. [Exkurs: 200 %-Kapazität (Georedundanz)](#7a-exkurs-200--kapazität-georedundanz)
+7a. [Exkurs: 200 %-Kapazität vs. 120 %-Kapazität](#7a-exkurs-200--kapazität-vs-120--kapazität)
 8. [Empfehlung und Fazit](#8-empfehlung-und-fazit)
 
 ---
@@ -37,7 +37,7 @@ Diese Analyse vergleicht sechs VDI-Lösungen hinsichtlich Funktionalität, Koste
 - **VMware Horizon** wurde als EUC-Sparte an KKR verkauft und firmiert seit Juli 2024 als **Omnissa** — die Zukunft der Plattform ist im Umbruch.
 - **Vergaberecht** erfordert bei allen Lösungen ab dem EU-Schwellenwert (216.000 € netto seit 01.01.2026) eine europaweite Ausschreibung.
 - **Deutsche Verwaltungscloud (DVC)** ist seit April 2025 produktiv — DVC-kompatible Lösungen bieten vereinfachte Beschaffungswege.
-- **200 %-Kapazität** (100 % Serverkapazität in RZ 1 + 100 % in RZ 2 für volle Georedundanz) ist eine bestehende Verfügbarkeitsstrategie, die bei einer VDI-Neubewertung hinterfragt werden sollte — siehe Exkurs 7a.
+- **200 % vs. 120 % Kapazität:** Die bestehende Strategie (volle Verdopplung über zwei RZ) sollte hinterfragt werden. Alternativ: 100 % Betrieb + 20 % Zuschlag für Betankung und Performance-Puffer — potenzielle Kostenersparnis von ca. 40 % bei der Infrastruktur. Siehe Exkurs 7a.
 
 ---
 
@@ -686,26 +686,60 @@ Die aktualisierten EU-Schwellenwerte gelten seit dem 1. Januar 2026 (veröffentl
 
 ---
 
-## 7a. Exkurs: 200 %-Kapazität (Georedundanz)
+## 7a. Exkurs: 200 %-Kapazität vs. 120 %-Kapazität
 
-Der Begriff „200 %" bezieht sich auf die bestehende Verfügbarkeitsstrategie: **100 % der benötigten Serverkapazität in Rechenzentrum 1 + 100 % in Rechenzentrum 2**. Bei Ausfall eines Rechenzentrums kann der gesamte Betrieb vom verbleibenden RZ übernommen werden — ohne Leistungseinbußen.
+### Ist-Zustand: 200 %-Strategie
 
-### Hintergrund
+Die bestehende Verfügbarkeitsstrategie sieht **100 % der benötigten Serverkapazität in RZ 1 + 100 % in RZ 2** vor. Bei Ausfall eines Rechenzentrums kann der gesamte Betrieb vom verbleibenden RZ übernommen werden — ohne Leistungseinbußen. Das bedeutet eine vollständige Verdopplung der Infrastruktur.
 
-Diese Strategie wurde seinerzeit unter dem Aspekt der **Hochverfügbarkeit** etabliert und bedeutet in der Praxis eine vollständige Verdopplung der Infrastruktur.
+### Kernfrage: 200 % oder 120 %?
 
-### Relevanz für die VDI-Ablösung
+| Modell | Beschreibung | Infrastruktur-Faktor |
+|--------|-------------|---------------------|
+| **200 % (Ist-Zustand)** | Je 100 % Kapazität pro RZ. Volle Redundanz: ein RZ fällt aus → null Einschränkungen. | **2,0×** der Basiskapazität |
+| **120 % (Alternative)** | 100 % für den laufenden Betrieb + 20 % Zuschlag für Betankung (Provisioning neuer VMs, Rollouts) und Performance-Puffer (Lastspitzen, Wartungsfenster). Verteilung über beide RZ im Active-Active-Betrieb. | **1,2×** der Basiskapazität |
 
-| Aspekt | Auswirkung |
-|--------|-----------|
-| **Kostenimpact** | Die 200 %-Strategie verdoppelt die Hardware- und Lizenzkosten. Bei den oben geschätzten TCO-Werten ist diese Verdopplung **noch nicht eingerechnet**. |
-| **Ist die Strategie noch zeitgemäß?** | Moderne VDI-Lösungen bieten Cluster- und Failover-Mechanismen (z.B. Proxmox HA-Cluster, Ceph-Replikation über Standorte), die eine vollständige 200 %-Verdopplung möglicherweise nicht mehr in vollem Umfang erfordern. |
-| **Active-Active vs. Active-Passive** | Statt 200 % Kapazität passiv vorzuhalten, kann ein Active-Active-Betrieb über zwei RZ die Gesamtkapazität besser auslasten (z.B. je 60 % Last pro RZ im Normalbetrieb, 100 % im Failover). |
-| **Differenzierte Betrachtung** | Nicht alle Workloads erfordern dieselbe Verfügbarkeit. Eine Klassifizierung in Tier 1 (geschäftskritisch, volle Redundanz) und Tier 2 (Standard, reduzierte Redundanz) kann Kosten senken. |
+### Vergleich der Modelle
 
-> **Empfehlung:** Die 200 %-Kapazitätsstrategie sollte im Rahmen der VDI-Neubewertung überprüft werden. Eine differenzierte Betrachtung nach Verfügbarkeitsanforderungen und modernen HA-Mechanismen könnte die Gesamtkosten erheblich reduzieren, ohne das Verfügbarkeitsniveau zu senken.
+| Kriterium | 200 % | 120 % |
+|-----------|-------|-------|
+| **Hardwarekosten** | 2× Basis | 1,2× Basis |
+| **Lizenzkosten** | 2× Basis | 1,2× Basis |
+| **Stromverbrauch / RZ-Fläche** | 2× Basis | 1,2× Basis |
+| **Verfügbarkeit bei RZ-Ausfall** | 100 % — voller Betrieb ohne Einschränkung | Eingeschränkt — Priorisierung nötig, nicht alle Desktops sofort verfügbar |
+| **Betankung / Provisioning** | Jederzeit volle Kapazität | 20 % Puffer deckt laufende Betankung und Rollouts ab |
+| **Performance-Puffer** | Großzügig | 20 % Headroom — ausreichend für normale Lastspitzen |
+| **Kostenersparnis** | Referenz | **ca. 40 % weniger** Hardware, Lizenzen, Strom |
 
-> **Hinweis:** Diese Diskussion hat weitreichende budgetäre Konsequenzen und sollte in einem eigenen Workshop mit RZ-Betrieb, IT-Sicherheit und Einkauf geführt werden.
+### Rechenbeispiel (100 Benutzer, Proxmox + UDS)
+
+| Kostenposition (5 Jahre) | 200 % | 120 % | Ersparnis |
+|--------------------------|-------|-------|-----------|
+| Hardware (Server, Storage) | ~200.000 € | ~120.000 € | ~80.000 € |
+| Lizenzen & Support | ~250.000 € | ~150.000 € | ~100.000 € |
+| Strom & RZ-Fläche | ~50.000 € | ~30.000 € | ~20.000 € |
+| **Gesamt (5 Jahre)** | **~500.000 €** | **~300.000 €** | **~200.000 €** |
+
+> *Hinweis: Schätzwerte zur Veranschaulichung. Konkrete Zahlen müssen mit dem Einkauf ermittelt werden.*
+
+### Risikobewertung
+
+**Risiko bei 120 %:** Bei einem vollständigen RZ-Ausfall stehen nicht sofort 100 % der Desktops zur Verfügung. Mögliche Mitigationsmaßnahmen:
+
+1. **Priorisierte Wiederherstellung:** Geschäftskritische Desktops (Tier 1) werden zuerst gestartet, Standardarbeitsplätze (Tier 2) zeitversetzt
+2. **Elastische Skalierung:** Moderne Hypervisoren können VMs innerhalb von Minuten auf verbleibende Hosts verteilen (Proxmox HA, Live-Migration)
+3. **Degraded Mode:** Kurzzeitig reduzierte Performance akzeptabel (z.B. weniger RAM pro VM), bis Hardware nachgezogen wird
+
+**Risiko bei 200 %:** Höhere Kosten ohne proportional höheren Nutzen, wenn ein vollständiger RZ-Ausfall statistisch selten ist und die Wiederherstellungszeit bei 120 % akzeptabel wäre.
+
+### Empfehlung
+
+Die Entscheidung zwischen 200 % und 120 % hängt von der **Risikotoleranz und den Verfügbarkeitsanforderungen (SLA)** ab:
+
+- **200 % beibehalten**, wenn ein RZ-Ausfall unter keinen Umständen zu Einschränkungen führen darf (z.B. aufgrund regulatorischer Vorgaben oder SLA-Verpflichtungen)
+- **120 % als Ziel**, wenn eine kurzzeitige Einschränkung bei einem RZ-Totalausfall akzeptabel ist und die erhebliche Kostenersparnis strategisch genutzt werden soll
+
+> **Nächster Schritt:** Workshop mit RZ-Betrieb, IT-Sicherheit und Einkauf — konkrete SLA-Anforderungen definieren und anhand realer Lastdaten den tatsächlich benötigten Kapazitätspuffer ermitteln.
 
 ---
 
