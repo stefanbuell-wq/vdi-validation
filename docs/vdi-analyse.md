@@ -351,6 +351,7 @@ Proxmox Virtual Environment (VE) ist eine Open-Source-Virtualisierungsplattform 
   - Für 1–49 User: Support ausschließlich über Reseller-Kanal
   - Unlimited-Users-Lizenz: bis max. ca. 21.000 €/Jahr (Flatrate)
   - Bildungsrabatt: 33,33 %; Mehrjahresrabatt: 4 % pro zusätzlichem Jahr
+- **Enterprise-Support über Fujitsu:** Die AOK bezieht den Proxmox Enterprise Support über Fujitsu als bestehenden Dienstleister. Dies vereinfacht die Beschaffung und bietet einen zentralen Ansprechpartner für Hardware und Virtualisierung.
 - **Drittanbieter in DACH:** Wachsend (z.B. Thomas-Krenn, netways, Heinlein Support)
 
 ---

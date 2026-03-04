@@ -363,6 +363,7 @@ def create_presentation():
                 "Multi-Protokoll (RDP, SPICE, HTML5, X2Go)",
                 "Kosteneffizient vs. VMware/Citrix",
                 "Referenzen im öffentlichen Sektor (Spanien)",
+                "Enterprise-Support über Fujitsu als bestehender Dienstleister verfügbar",
             ],
             "cons": [
                 "Geringere Marktpräsenz in Deutschland",
