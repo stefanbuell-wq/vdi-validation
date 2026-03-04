@@ -230,7 +230,59 @@ def create_presentation():
             style_table_cell(table.cell(r, c), rows_data[r][c], size=11, fill_color=bg)
 
     # ============================================================
-    # SLIDE 5: Section Divider — Einzelanalysen
+    # SLIDE 5: VDI-Bereitstellungsmodelle
+    # ============================================================
+    slide = prs.slides.add_slide(prs.slide_layouts[LY_ONLY_TITLE])
+    for ph in slide.placeholders:
+        if ph.placeholder_format.idx == 0:
+            ph.text = "VDI-Bereitstellungsmodelle"
+        elif ph.placeholder_format.idx == 15:
+            ph.text = "Der Begriff \u201eVDI\u201c umfasst verschiedene Bereitstellungsmodelle"
+
+    # Modelle-Tabelle
+    model_data = [
+        ["Modell", "Beschreibung", "Beispiel"],
+        ["Desktop-basierte VDI",
+         "Ein dedizierter Desktop läuft in einer eigenen VM.\nJeder Nutzer erhält seinen eigenen Desktop.",
+         "Proxmox + UDS, Omnissa Horizon,\nCitrix Virtual Desktops"],
+        ["Serverbasierte VDI\n(Remote-PC)",
+         "Ein Desktop läuft in einem Server-OS,\ndas nur für einen einzelnen Benutzer verfügbar ist.",
+         "Citrix Remote PC Access,\nphysische Workstations per Remoting"],
+        ["Sitzungsbasierte VDI",
+         "Mehrere Benutzer teilen sich ein Server-OS —\njeder Nutzer erhält eine eigene Sitzung.",
+         "Windows RDS,\nCitrix Virtual Apps"],
+    ]
+
+    left, top = Cm(1.5), Cm(4.2)
+    width, height = Cm(30), Cm(0.8 * len(model_data))
+    table = add_table(slide, len(model_data), 3, left, top, width, height)
+    set_column_widths(table, [7, 13, 10])
+    style_header_row(table, model_data[0])
+    for r in range(1, len(model_data)):
+        bg = RGBColor(0xF0, 0xF7, 0xF0) if r % 2 == 1 else None
+        for c in range(3):
+            style_table_cell(table.cell(r, c), model_data[r][c], size=10, fill_color=bg)
+
+    # Hinweis unterhalb der Tabelle
+    txbox = slide.shapes.add_textbox(Cm(1.5), Cm(8.5), Cm(30), Cm(4.5))
+    tf = txbox.text_frame
+    tf.word_wrap = True
+    p = tf.paragraphs[0]
+    run = p.add_run()
+    run.text = ("Wichtig: Bei der aktuellen Infrastruktur werden ca. 1.400 Worker Server "
+                "für sitzungsbasierte Desktops betrieben. Bei einer Umstellung auf desktop-basierte VDI "
+                "könnten alternativ bis zu 8.000 individuelle Desktops bereitgestellt werden.")
+    set_font(run, size=11, bold=False, color=AOK_GRAY)
+
+    add_paragraph(tf, "", size=6, space_after=Pt(4))
+    add_paragraph(tf,
+        "Citrix als VDI-Plattform: Die bestehende Citrix-Umgebung kann nicht nur sitzungsbasierte "
+        "Desktops (Virtual Apps), sondern auch vollwertige Desktop-VDI (Virtual Desktops) bereitstellen. "
+        "Ein Wechsel der VDI-Lösung bedeutet nicht zwingend einen Wechsel des Bereitstellungsmodells.",
+        size=11, bold=False, color=AOK_GRAY)
+
+    # ============================================================
+    # SLIDE 6: Section Divider — Einzelanalysen
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_SECTION_GREEN])
     for ph in slide.placeholders:
