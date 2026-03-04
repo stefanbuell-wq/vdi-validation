@@ -8,10 +8,15 @@
 
 ```
 vdi-validation/
-├── README.md              # Project description
-├── CLAUDE.md              # This file — guidance for AI assistants
-└── docs/
-    └── vdi-analyse.md     # Comprehensive VDI comparison analysis (German)
+├── README.md                          # Project description
+├── CLAUDE.md                          # This file — guidance for AI assistants
+├── Präsentation Master.pptx           # AOK PowerPoint master template
+├── Citrix Exit_Design Thinking.pptx   # Citrix Exit reference presentation
+├── docs/
+│   ├── vdi-analyse.md                 # Comprehensive VDI comparison analysis (German)
+│   └── VDI-Vergleichsanalyse.pptx     # VDI comparison PowerPoint presentation
+└── scripts/
+    └── create_presentation.py         # Script to regenerate the PowerPoint
 ```
 
 ## Development Workflow
