@@ -177,7 +177,7 @@ def create_presentation():
             tf = ph.text_frame
             tf.clear()
             items = [
-                ("Ziel:", " Evaluierung geeigneter VDI-Lösungen für unsere öffentlich-rechtliche Einrichtung"),
+                ("Ziel:", " Evaluierung geeigneter VDI-Lösungen für ~7.000 Desktops in unserer öffentlich-rechtlichen Einrichtung"),
                 ("Anforderungen:", " Datenschutz (DSGVO), IT-Sicherheit (BSI), Vergaberecht (VgV/UVgO)"),
                 ("Bewertungskriterien:", " Kosten, Datenschutz, Funktionalität, Support, Vergaberecht, Zukunftssicherheit"),
                 ("Sechs Lösungen:", " Von klassisch On-Premises bis Cloud, von proprietär bis Open Source"),
@@ -259,9 +259,9 @@ def create_presentation():
                 "Steigende CAL-Kosten bei Wachstum",
                 "Kein modernes zentrales Management",
             ],
-            "cost_label": "TCO 5J / 100 User",
-            "cost_value": "~255.000 €",
-            "cost_per_user": "~510 €/User/Jahr",
+            "cost_label": "TCO 5J / 7.000 User",
+            "cost_value": "~9,8 Mio. €",
+            "cost_per_user": "~280 €/User/Jahr",
         },
         {
             "name": "Azure Local (ehem. Azure Stack HCI)",
@@ -280,9 +280,9 @@ def create_presentation():
                 "Starker Microsoft-Lock-in",
                 "Azure-Subscription auch bei reinem On-Prem nötig",
             ],
-            "cost_label": "TCO 5J / 100 User",
-            "cost_value": "~625.000 €",
-            "cost_per_user": "~1.250 €/User/Jahr",
+            "cost_label": "TCO 5J / 7.000 User",
+            "cost_value": "~28,5 Mio. €",
+            "cost_per_user": "~814 €/User/Jahr",
         },
         {
             "name": "Azure Virtual Desktop (Cloud)",
@@ -303,9 +303,9 @@ def create_presentation():
                 "Komplexe Kostenprognose (verbrauchsbasiert)",
                 "Rechtliche Unsicherheit für öffentl. Einrichtungen",
             ],
-            "cost_label": "TCO 5J / 100 User",
-            "cost_value": "~620.000 €",
-            "cost_per_user": "~1.240 €/User/Jahr",
+            "cost_label": "TCO 5J / 7.000 User",
+            "cost_value": "~29,8 Mio. €",
+            "cost_per_user": "~851 €/User/Jahr",
         },
         {
             "name": "Omnissa Horizon (ehem. VMware)",
@@ -326,9 +326,9 @@ def create_presentation():
                 "Basic Support abgekündigt (nur noch Production)",
                 "Starker Vendor-Lock-in",
             ],
-            "cost_label": "TCO 5J / 100 User",
-            "cost_value": "~675.000 €",
-            "cost_per_user": "~1.350 €/User/Jahr",
+            "cost_label": "TCO 5J / 7.000 User",
+            "cost_value": "~34,0 Mio. €",
+            "cost_per_user": "~971 €/User/Jahr",
         },
         {
             "name": "Open Source — OpenDesktop",
@@ -349,9 +349,9 @@ def create_presentation():
                 "Display-Performance hinter proprietären Protokollen",
                 "Wenig Referenzen in deutschen Behörden",
             ],
-            "cost_label": "TCO 5J / 100 User",
-            "cost_value": "~370.000 €",
-            "cost_per_user": "~740 €/User/Jahr",
+            "cost_label": "TCO 5J / 7.000 User",
+            "cost_value": "~16,5 Mio. €",
+            "cost_per_user": "~471 €/User/Jahr",
         },
         {
             "name": "Proxmox VE + UDS Enterprise",
@@ -372,9 +372,9 @@ def create_presentation():
                 "Kein FSLogix/App Volumes-Äquivalent",
                 "Know-how-Aufbau in DACH noch begrenzt",
             ],
-            "cost_label": "TCO 5J / 100 User",
-            "cost_value": "~325.000 €",
-            "cost_per_user": "~650 €/User/Jahr",
+            "cost_label": "TCO 5J / 7.000 User",
+            "cost_value": "~15,5 Mio. €",
+            "cost_per_user": "~443 €/User/Jahr",
         },
     ]
 
@@ -495,20 +495,20 @@ def create_presentation():
     slide = prs.slides.add_slide(prs.slide_layouts[LY_ONLY_TITLE])
     for ph in slide.placeholders:
         if ph.placeholder_format.idx == 0:
-            ph.text = "TCO-Kostenvergleich — 5 Jahre, 100 Benutzer"
+            ph.text = "TCO-Kostenvergleich — 5 Jahre, 7.000 Benutzer"
         elif ph.placeholder_format.idx == 15:
-            ph.text = "Total Cost of Ownership inkl. Hardware, Lizenzen, Support, Personal"
+            ph.text = "Total Cost of Ownership inkl. Hardware, Lizenzen, Support, Personal (in Mio. €)"
 
     tco_headers = ["Kostenposition", "RDS", "Azure\nLocal", "AVD\n(Cloud)", "Omnissa\nHorizon", "Open\nDesktop", "Proxmox\n+ UDS"]
     tco_data = [
-        ["Hardware (einmalig)", "30.000 €", "70.000 €", "0 €", "60.000 €", "45.000 €", "45.000 €"],
-        ["Lizenzen (5 J.)", "60.000 €", "350.000 €", "500.000 €", "350.000 €", "0 €", "50.000 €"],
-        ["Windows-Lizenzen (5 J.)", "20.000 €", "inkl.", "inkl.", "60.000 €", "60.000 €", "60.000 €"],
-        ["Support (5 J.)", "30.000 €", "50.000 €", "25.000 €", "50.000 €", "50.000 €", "25.000 €"],
-        ["Implementierung", "15.000 €", "30.000 €", "20.000 €", "30.000 €", "40.000 €", "20.000 €"],
-        ["Internes Personal (5 J.)", "100.000 €", "125.000 €", "75.000 €", "125.000 €", "175.000 €", "125.000 €"],
-        ["TCO 5 Jahre", "~255.000 €", "~625.000 €", "~620.000 €", "~675.000 €", "~370.000 €", "~325.000 €"],
-        ["TCO pro User/Jahr", "~510 €", "~1.250 €", "~1.240 €", "~1.350 €", "~740 €", "~650 €"],
+        ["Hardware (Server,\nStorage, Netzwerk)", "2,0 Mio.", "5,0 Mio.", "0 €", "4,5 Mio.", "3,5 Mio.", "3,5 Mio."],
+        ["Lizenzen (5 J.)", "3,5 Mio.", "16,0 Mio.", "18,0 Mio.", "18,0 Mio.", "0 €", "2,5 Mio."],
+        ["Windows-Lizenzen (5 J.)", "inkl. EA", "inkl.", "inkl.", "3,5 Mio.", "3,5 Mio.", "3,5 Mio."],
+        ["Support (5 J.)", "0,8 Mio.", "2,0 Mio.", "1,0 Mio.", "2,5 Mio.", "2,5 Mio.", "1,5 Mio."],
+        ["Implementierung", "0,5 Mio.", "1,5 Mio.", "0,8 Mio.", "1,5 Mio.", "2,0 Mio.", "1,0 Mio."],
+        ["Internes Personal\n(5 J., ~6-10 FTE)", "3,0 Mio.", "4,0 Mio.", "2,5 Mio.", "4,0 Mio.", "5,0 Mio.", "3,5 Mio."],
+        ["TCO 5 Jahre", "~9,8 Mio.", "~28,5 Mio.", "~29,8 Mio.", "~34,0 Mio.", "~16,5 Mio.", "~15,5 Mio."],
+        ["TCO pro User/Jahr", "~280 €", "~814 €", "~851 €", "~971 €", "~471 €", "~443 €"],
     ]
 
     n_rows = len(tco_data) + 1
@@ -663,7 +663,7 @@ def create_presentation():
                 ("Unterschwellenbereich (UVgO):", ""),
                 ("Direktvergabe:", " bis 100.000 € möglich"),
                 ("", ""),
-                ("Praxis:", " Bei VDI-Projekten wird der Schwellenwert über die Vertragslaufzeit (5 J.) fast immer überschritten → EU-weite Ausschreibung erforderlich"),
+                ("Praxis:", " Bei 7.000 Desktops (TCO 10-34 Mio. €) ist eine EU-weite Ausschreibung zwingend erforderlich"),
             ]
             for label, val in items:
                 p = tf.add_paragraph()
@@ -769,14 +769,14 @@ def create_presentation():
 
     score_headers = ["Kriterium (Gewicht)", "RDS", "Azure\nLocal", "AVD\n(Cloud)", "Omnissa\nHorizon", "Open\nDesktop", "Proxmox\n+ UDS"]
     score_data = [
-        ["Kosten (25 %)", "9", "5", "4", "3", "7", "8"],
+        ["Kosten (25 %)", "9", "5", "5", "3", "7", "8"],
         ["Datenschutz (25 %)", "8", "6", "3", "7", "10", "9"],
-        ["Funktionsumfang (15 %)", "5", "8", "9", "9", "4", "7"],
+        ["Funktionsumfang (15 %)", "4", "8", "9", "9", "4", "7"],
         ["Support (10 %)", "8", "7", "8", "5", "3", "6"],
         ["Vergaberecht (10 %)", "7", "6", "5", "4", "9", "8"],
         ["Zukunftssicherheit (10 %)", "6", "8", "8", "4", "6", "7"],
-        ["Betriebsaufwand (5 %)", "8", "5", "9", "5", "3", "6"],
-        ["Gewichtete Summe", "7,45", "6,25", "5,60", "5,35", "6,55", "7,70"],
+        ["Betriebsaufwand (5 %)", "6", "5", "9", "5", "2", "6"],
+        ["Gewichtete Summe", "7,25", "6,30", "5,90", "5,40", "6,75", "7,70"],
     ]
 
     n_rows = len(score_data) + 1
@@ -831,12 +831,12 @@ def create_presentation():
             tf.clear()
 
             rankings = [
-                ("1.", "Proxmox + UDS Enterprise", "7,70", "Bestes Gesamtpaket: Kosten, Datenschutz, Funktionalität"),
-                ("2.", "Windows RDS", "7,45", "Günstigste Lösung, aber keine echte VDI"),
-                ("3.", "OpenDesktop", "6,55", "Maximale Datensouveränität, hoher Personalaufwand"),
-                ("4.", "Azure Local", "6,25", "Guter Kompromiss, aber teuer und MS-abhängig"),
-                ("5.", "Azure Virtual Desktop", "5,60", "Technisch stark, Datenschutz kritisch"),
-                ("6.", "Omnissa Horizon", "5,35", "Technisch ausgereift, Kosten-/KKR-Risiko"),
+                ("1.", "Proxmox + UDS Enterprise", "7,70", "Bestes Gesamtpaket: Kosten, Datenschutz, Skalierbarkeit — TCO ~15,5 Mio. €"),
+                ("2.", "Windows RDS", "7,25", "Günstigste Lösung (~9,8 Mio. €), aber sitzungsbasiert — keine echte VDI"),
+                ("3.", "OpenDesktop", "6,75", "Maximale Datensouveränität, aber ~10 FTE Personalaufwand"),
+                ("4.", "Azure Local", "6,30", "Guter Kompromiss, aber ~28,5 Mio. € und starker MS-Lock-in"),
+                ("5.", "Azure Virtual Desktop", "5,90", "Autoscaling-Vorteil bei 7.000 Usern, Datenschutz kritisch"),
+                ("6.", "Omnissa Horizon", "5,40", "Technisch ausgereift, aber teuerste Option (~34 Mio. €)"),
             ]
 
             for i, (rank, name, score, note) in enumerate(rankings):
@@ -874,13 +874,13 @@ def create_presentation():
 
             recommendations = [
                 ("Kurzfristig / einfache Anforderungen:",
-                 "Windows RDS als bewährte, kostengünstige Lösung für sitzungsbasierte Desktops"),
-                ("Mittelfristig / VDI-Einstieg:",
-                 "Proxmox VE + UDS Enterprise als kosteneffiziente, datenschutzkonforme Lösung mit europäischen Herstellern"),
+                 "Windows RDS als bewährte Lösung — TCO ~9,8 Mio. € für 7.000 User, aber keine echte VDI und begrenzte Skalierungsfähigkeit (~100 RDS-Hosts nötig)"),
+                ("Empfehlung für 7.000 Desktops:",
+                 "Proxmox VE + UDS Enterprise — TCO ~15,5 Mio. €, echte VDI, datenschutzkonform, EU-Hersteller; bei dieser Größenordnung der beste Kosten-Nutzen-Kompromiss"),
                 ("Strategisch / Digitale Souveränität:",
-                 "Evaluierung einer Open-Source-Strategie (Proxmox/OpenDesktop) im Einklang mit der Digitalstrategie der öffentlichen Verwaltung"),
+                 "OpenDesktop-Ansatz als langfristige Open-Source-Strategie (~16,5 Mio. €), aber ~10 FTE nötig — nur mit entsprechendem Personalaufbau realistisch"),
                 ("Mit Vorsicht:",
-                 "Omnissa Horizon (KKR-/vSphere-Kostenrisiko) und reine AVD-Cloud (Datenschutzrisiko) nur nach umfassender Risiko- und Kosten-Analyse; AVD ggf. über Delos Cloud evaluieren"),
+                 "Omnissa Horizon (~34 Mio. €) und AVD Cloud (~29,8 Mio. €) — erhebliches Kostenrisiko bei 7.000 Desktops; AVD zusätzlich Datenschutzrisiko (CLOUD Act)"),
             ]
 
             for i, (title, desc) in enumerate(recommendations):
@@ -915,13 +915,13 @@ def create_presentation():
             tf.clear()
 
             steps = [
-                ("1.", "Anforderungsanalyse", "Exakte Nutzerzahl, Anwendungslandschaft, Performance definieren"),
+                ("1.", "Anforderungsanalyse", "7.000 Desktops: Nutzerprofile, Anwendungslandschaft, Performance-Klassen definieren"),
                 ("2.", "Datenschutz-Folgenabschätzung (DSFA)", "Durchführung für favorisierte Lösungen"),
                 ("3.", "Proof of Concept (PoC)", "Pilotierung mit 2-3 favorisierten Lösungen"),
                 ("4.", "Abstimmung mit dem DSB", "Datenschutzbeauftragten einbeziehen"),
                 ("5.", "Marktrecherche (§ 28 VgV)", "Markterkundung und Lieferantengespräche"),
                 ("6.", "Vergabeunterlage erstellen", "Funktionale Leistungsbeschreibung"),
-                ("7.", "EU-weite Ausschreibung", "Sofern Schwellenwert überschritten (sehr wahrscheinlich)"),
+                ("7.", "EU-weite Ausschreibung", "Bei 7.000 Desktops zwingend erforderlich (TCO >> Schwellenwert)"),
             ]
 
             for i, (num, title, desc) in enumerate(steps):
