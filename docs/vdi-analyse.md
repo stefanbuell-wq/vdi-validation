@@ -351,7 +351,7 @@ Proxmox Virtual Environment (VE) ist eine Open-Source-Virtualisierungsplattform 
   - Für 1–49 User: Support ausschließlich über Reseller-Kanal
   - Unlimited-Users-Lizenz: bis max. ca. 21.000 €/Jahr (Flatrate)
   - Bildungsrabatt: 33,33 %; Mehrjahresrabatt: 4 % pro zusätzlichem Jahr
-- **Enterprise-Support über Fujitsu:** Die AOK bezieht den Proxmox Enterprise Support über Fujitsu als bestehenden Dienstleister. Dies vereinfacht die Beschaffung und bietet einen zentralen Ansprechpartner für Hardware und Virtualisierung.
+- **Enterprise-Support über Fujitsu:** Es besteht ein Rahmenvertrag mit Fujitsu, über den Proxmox Enterprise Support bezogen werden könnte. **Zu klären:** Ob der bestehende Rahmenvertrag diese Dienstleistung abdeckt oder ob eine separate Ausschreibung erforderlich ist (abhängig vom Leistungsgegenstand des Rahmenvertrags und den vergaberechtlichen Abrufbedingungen).
 - **Drittanbieter in DACH:** Wachsend (z.B. Thomas-Krenn, netways, Heinlein Support)
 
 ---
@@ -637,7 +637,7 @@ Die aktualisierten EU-Schwellenwerte gelten seit dem 1. Januar 2026 (veröffentl
 | **AVD (Cloud)** | EVB-IT Cloud-Vertrag; besondere Prüfung der AGB von Microsoft erforderlich (Standardvertragsklauseln); DSFA als Teil der Vergabeunterlage |
 | **Omnissa Horizon** | Seit Juli 2024 eigenständiges Unternehmen (Omnissa/KKR); Beschaffungskanäle über Omnissa-Partner; unterliegende vSphere-Lizenzierung weiterhin über Broadcom — ggf. Losaufteilung (Horizon + vSphere getrennt); Perpetual-Lizenzen nicht mehr verfügbar |
 | **OpenDesktop** | Ausschreibung der Integrationsdienstleistung; Software selbst frei verfügbar; fördert Wettbewerb und Anbietervielfalt — vergaberechtlich vorteilhaft |
-| **Proxmox + UDS** | Ausschreibung der Implementierung + UDS-Lizenzen; europäischer Anbieter — positiv im Vergabeverfahren; Proxmox-Subscription über Partner beziehbar |
+| **Proxmox + UDS** | Ausschreibung der Implementierung + UDS-Lizenzen; europäischer Anbieter — positiv im Vergabeverfahren; Proxmox-Subscription über Partner beziehbar; **Prüfung:** Bestehender Rahmenvertrag mit Fujitsu — deckt dieser Proxmox-Enterprise-Support ab oder ist eine separate Ausschreibung nötig? |
 
 ### 7.4 Ausschreibungshinweise
 
