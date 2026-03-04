@@ -150,6 +150,7 @@ def create_presentation():
                 "Vergleichsmatrix und TCO-Kostenvergleich",
                 "Datenschutz und IT-Sicherheit",
                 "Vergaberechtliche Aspekte",
+                "Exkurs: 200 % vs. 120 % Kapazität",
                 "Bewertungsmatrix und Empfehlung",
                 "Nächste Schritte",
             ]
@@ -827,7 +828,112 @@ def create_presentation():
                     set_font(run, size=13, color=AOK_DARK_GRAY)
 
     # ============================================================
-    # SLIDE 22: Section Divider — Empfehlung
+    # SLIDE 22: Section Divider — Exkurs Kapazität
+    # ============================================================
+    slide = prs.slides.add_slide(prs.slide_layouts[LY_SECTION_GREEN])
+    for ph in slide.placeholders:
+        if ph.placeholder_format.idx == 0:
+            ph.text = "Exkurs:\n200 % vs. 120 %"
+        elif ph.placeholder_format.idx == 11:
+            ph.text = "Brauchen wir wirklich die volle Verdopplung?"
+
+    # ============================================================
+    # SLIDE 23: 200 % vs. 120 % — Modellvergleich
+    # ============================================================
+    slide = prs.slides.add_slide(prs.slide_layouts[LY_ONLY_TITLE])
+    for ph in slide.placeholders:
+        if ph.placeholder_format.idx == 0:
+            ph.text = "200 % vs. 120 % — Kapazitätsmodelle im Vergleich"
+
+    # Model comparison table
+    cap_headers = ["Kriterium", "200 % (Ist-Zustand)", "120 % (Alternative)"]
+    cap_data = [
+        ["Infrastruktur-Faktor", "2,0× der Basiskapazität", "1,2× der Basiskapazität"],
+        ["Prinzip", "100 % pro RZ\n(Active-Passive)", "100 % Betrieb + 20 % Puffer\n(Active-Active)"],
+        ["Hardwarekosten", "2× Basis", "1,2× Basis"],
+        ["Lizenzkosten", "2× Basis", "1,2× Basis"],
+        ["Strom / RZ-Fläche", "2× Basis", "1,2× Basis"],
+        ["Verfügbarkeit bei\nRZ-Ausfall", "100 % — voller Betrieb\nohne Einschränkung", "Eingeschränkt —\nPriorisierung nötig"],
+        ["Betankung /\nProvisioning", "Jederzeit volle Kapazität", "20 % Puffer deckt\nlaufende Rollouts ab"],
+        ["Performance-Puffer", "Großzügig", "20 % Headroom —\nnormale Lastspitzen"],
+        ["Kostenersparnis", "Referenz", "ca. 40 % weniger"],
+    ]
+
+    rows = len(cap_data) + 1
+    cols = len(cap_headers)
+    table = add_table(slide, rows, cols, Cm(1.5), Cm(3.5), Cm(22), Cm(13))
+    set_column_widths(table, [5.5, 8.25, 8.25])
+    style_header_row(table, cap_headers)
+    for r, row_data in enumerate(cap_data, start=1):
+        for c, val in enumerate(row_data):
+            bold = (c == 0)
+            bg = RGBColor(0xF0, 0xF8, 0xF0) if c == 2 else None
+            style_table_cell(table.cell(r, c), val, size=9, bold=bold,
+                             color=AOK_GREEN if c == 2 and r == len(cap_data) else AOK_DARK_GRAY,
+                             fill_color=bg)
+
+    # ============================================================
+    # SLIDE 24: 200 % vs. 120 % — Kostenbeispiel und Risiko
+    # ============================================================
+    slide = prs.slides.add_slide(prs.slide_layouts[LY_TWO_COL])
+    for ph in slide.placeholders:
+        if ph.placeholder_format.idx == 0:
+            ph.text = "200 % vs. 120 % — Kosten und Risikobewertung"
+        elif ph.placeholder_format.idx == 15:
+            ph.text = "Rechenbeispiel und Mitigationsmaßnahmen"
+        elif ph.placeholder_format.idx == 14:
+            # Left column: cost example
+            tf = ph.text_frame
+            tf.clear()
+            add_paragraph(tf, "Rechenbeispiel (Proxmox + UDS, 5 Jahre)", size=13, bold=True, color=AOK_GREEN, space_after=Pt(10))
+            cost_lines = [
+                ("Hardware:", "200 %: ~200 T€  →  120 %: ~120 T€"),
+                ("Lizenzen & Support:", "200 %: ~250 T€  →  120 %: ~150 T€"),
+                ("Strom & RZ-Fläche:", "200 %: ~50 T€  →  120 %: ~30 T€"),
+                ("Gesamt:", "200 %: ~500 T€  →  120 %: ~300 T€"),
+            ]
+            for label, val in cost_lines:
+                p = tf.add_paragraph()
+                p.space_after = Pt(4)
+                run = p.add_run()
+                run.text = label + "  "
+                is_total = "Gesamt" in label
+                set_font(run, size=11, bold=True, color=AOK_GREEN if is_total else AOK_DARK_GRAY)
+                run = p.add_run()
+                run.text = val
+                set_font(run, size=11, bold=is_total, color=AOK_GREEN if is_total else AOK_DARK_GRAY)
+
+            p = tf.add_paragraph()
+            p.space_after = Pt(10)
+            add_paragraph(tf, "→ Potenzielle Ersparnis: ca. 200.000 € (40 %)", size=12, bold=True, color=AOK_GREEN, space_after=Pt(6))
+
+        elif ph.placeholder_format.idx == 16:
+            # Right column: risk assessment
+            tf = ph.text_frame
+            tf.clear()
+            add_paragraph(tf, "Risiko bei 120 % — Mitigation", size=13, bold=True, color=AOK_GREEN, space_after=Pt(10))
+            risk_items = [
+                ("Priorisierte Wiederherstellung:", " Tier-1-Desktops (geschäftskritisch) zuerst, Tier-2 zeitversetzt"),
+                ("Elastische Skalierung:", " Proxmox HA verteilt VMs in Minuten auf verbleibende Hosts"),
+                ("Degraded Mode:", " Kurzzeitig reduzierte Ressourcen pro VM akzeptabel"),
+            ]
+            for label, val in risk_items:
+                p = tf.add_paragraph()
+                p.space_after = Pt(8)
+                run = p.add_run()
+                run.text = label
+                set_font(run, size=11, bold=True, color=AOK_DARK_GRAY)
+                run = p.add_run()
+                run.text = val
+                set_font(run, size=11, color=AOK_DARK_GRAY)
+
+            p = tf.add_paragraph()
+            p.space_after = Pt(12)
+            add_paragraph(tf, "Empfehlung", size=13, bold=True, color=AOK_GREEN, space_after=Pt(6))
+            add_paragraph(tf, "Workshop mit RZ-Betrieb, IT-Sicherheit und Einkauf — SLA-Anforderungen definieren, reale Lastdaten analysieren, Kapazitätspuffer bestimmen.", size=11, color=AOK_DARK_GRAY, space_after=Pt(4))
+
+    # ============================================================
+    # SLIDE 25: Section Divider — Empfehlung
     # ============================================================
     slide = prs.slides.add_slide(prs.slide_layouts[LY_SECTION_GREEN])
     for ph in slide.placeholders:
