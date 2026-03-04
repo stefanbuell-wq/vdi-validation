@@ -143,27 +143,28 @@ def create_presentation():
         elif ph.placeholder_format.idx == 20:  # Content
             tf = ph.text_frame
             tf.clear()
+            # (label, text, indent_level, font_size)
             items = [
-                "Ausgangslage und Zielsetzung",
-                "Bewertete VDI-Lösungen im Überblick",
-                "Einzelanalysen der sechs Lösungen",
-                "Vergleichsmatrix und TCO-Kostenvergleich",
-                "Datenschutz und IT-Sicherheit",
-                "Vergaberechtliche Aspekte",
-                "Exkurs: 200 % vs. 120 % Kapazität",
-                "Bewertungsmatrix und Empfehlung",
-                "Nächste Schritte",
+                ("1.", "Ausgangslage und Zielsetzung", 0, 18),
+                ("2.", "Bewertete VDI-Lösungen im Überblick", 0, 18),
+                ("3.", "Einzelanalysen der sechs Lösungen", 0, 18),
+                ("4.", "Vergleichsmatrix und TCO-Kostenvergleich", 0, 18),
+                ("5.", "Datenschutz und IT-Sicherheit", 0, 18),
+                ("6.", "Vergaberechtliche Aspekte", 0, 18),
+                ("6a.", "Exkurs: 200 % vs. 120 % Kapazität", 1, 16),
+                ("7.", "Bewertungsmatrix und Empfehlung", 0, 18),
+                ("8.", "Nächste Schritte", 0, 18),
             ]
-            for i, item in enumerate(items):
+            for i, (label, item, level, fsize) in enumerate(items):
                 if i == 0:
                     p = tf.paragraphs[0]
                 else:
                     p = tf.add_paragraph()
-                p.level = 0
+                p.level = level
                 p.space_after = Pt(10)
                 run = p.add_run()
-                run.text = f"{i+1}.  {item}"
-                set_font(run, size=18, color=AOK_DARK_GRAY)
+                run.text = f"{label}  {item}"
+                set_font(run, size=fsize, color=AOK_DARK_GRAY)
 
     # ============================================================
     # SLIDE 3: Ausgangslage

@@ -21,7 +21,7 @@
 5. [Kostenvergleich (TCO-Schätzung)](#5-kostenvergleich)
 6. [Datenschutz und IT-Sicherheit](#6-datenschutz-und-it-sicherheit)
 7. [Vergaberechtliche Aspekte](#7-vergaberechtliche-aspekte)
-7a. [Exkurs: 200 %-Kapazität vs. 120 %-Kapazität](#7a-exkurs-200--kapazität-vs-120--kapazität)
+   - 7a. [Exkurs: 200 %-Kapazität vs. 120 %-Kapazität](#7a-exkurs-200--kapazität-vs-120--kapazität)
 8. [Empfehlung und Fazit](#8-empfehlung-und-fazit)
 
 ---
