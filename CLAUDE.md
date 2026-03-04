@@ -8,8 +8,10 @@
 
 ```
 vdi-validation/
-├── README.md          # Project description
-└── CLAUDE.md          # This file — guidance for AI assistants
+├── README.md              # Project description
+├── CLAUDE.md              # This file — guidance for AI assistants
+└── docs/
+    └── vdi-analyse.md     # Comprehensive VDI comparison analysis (German)
 ```
 
 ## Development Workflow
