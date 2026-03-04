@@ -21,7 +21,7 @@
 5. [Kostenvergleich (TCO-Schätzung)](#5-kostenvergleich)
 6. [Datenschutz und IT-Sicherheit](#6-datenschutz-und-it-sicherheit)
 7. [Vergaberechtliche Aspekte](#7-vergaberechtliche-aspekte)
-7a. [Exkurs: 200 %-Unabhängigkeit](#7a-exkurs-200--unabhängigkeit)
+7a. [Exkurs: 200 %-Kapazität (Georedundanz)](#7a-exkurs-200--kapazität-georedundanz)
 8. [Empfehlung und Fazit](#8-empfehlung-und-fazit)
 
 ---
@@ -37,7 +37,7 @@ Diese Analyse vergleicht sechs VDI-Lösungen hinsichtlich Funktionalität, Koste
 - **VMware Horizon** wurde als EUC-Sparte an KKR verkauft und firmiert seit Juli 2024 als **Omnissa** — die Zukunft der Plattform ist im Umbruch.
 - **Vergaberecht** erfordert bei allen Lösungen ab dem EU-Schwellenwert (216.000 € netto seit 01.01.2026) eine europaweite Ausschreibung.
 - **Deutsche Verwaltungscloud (DVC)** ist seit April 2025 produktiv — DVC-kompatible Lösungen bieten vereinfachte Beschaffungswege.
-- **200 %-Unabhängigkeit** (d.h. vollständige Herstellerunabhängigkeit bei gleichzeitiger Redundanz) ist ein strategisches Ziel, das unabhängig von der konkreten Produktauswahl diskutiert werden sollte — siehe separater Abschnitt.
+- **200 %-Kapazität** (100 % Serverkapazität in RZ 1 + 100 % in RZ 2 für volle Georedundanz) ist eine bestehende Verfügbarkeitsstrategie, die bei einer VDI-Neubewertung hinterfragt werden sollte — siehe Exkurs 7a.
 
 ---
 
@@ -686,21 +686,26 @@ Die aktualisierten EU-Schwellenwerte gelten seit dem 1. Januar 2026 (veröffentl
 
 ---
 
-## 7a. Exkurs: 200 %-Unabhängigkeit
+## 7a. Exkurs: 200 %-Kapazität (Georedundanz)
 
-Die Frage der „200 %-Unabhängigkeit" — also der vollständigen Herstellerunabhängigkeit bei gleichzeitiger Redundanz — ist ein strategisches Thema, das unabhängig von der konkreten Produktauswahl diskutiert werden kann und sollte.
+Der Begriff „200 %" bezieht sich auf die bestehende Verfügbarkeitsstrategie: **100 % der benötigten Serverkapazität in Rechenzentrum 1 + 100 % in Rechenzentrum 2**. Bei Ausfall eines Rechenzentrums kann der gesamte Betrieb vom verbleibenden RZ übernommen werden — ohne Leistungseinbußen.
 
-**Kernfrage:** Soll die Organisation in der Lage sein, bei einem Ausfall oder einer unvorteilhaften Veränderung eines Anbieters (Preiserhöhung, Abkündigung, Übernahme) den vollständigen Betrieb auf eine alternative Lösung umzustellen?
+### Hintergrund
 
-| Aspekt | Beschreibung |
-|--------|-------------|
-| **Strategie A: Single-Vendor** | Eine VDI-Lösung für alle Nutzer. Geringerer Betriebsaufwand, aber volles Abhängigkeitsrisiko. |
-| **Strategie B: Dual-Vendor** | Zwei VDI-Lösungen parallel (z.B. Proxmox + UDS für 80 % und RDS als Fallback für 20 %). Höherer Betriebsaufwand, aber Wechseloption. |
-| **Strategie C: Abstraktion** | Ein herstellerunabhängiger Connection Broker (z.B. UDS Enterprise), der mehrere Hypervisoren bedienen kann. Wechsel des Hypervisors ohne Wechsel der Managementschicht. |
+Diese Strategie wurde seinerzeit unter dem Aspekt der **Hochverfügbarkeit** etabliert und bedeutet in der Praxis eine vollständige Verdopplung der Infrastruktur.
 
-> **Empfehlung:** Strategie C bietet das beste Verhältnis aus Aufwand und Unabhängigkeit. UDS Enterprise unterstützt Proxmox, oVirt, VMware, Hyper-V, Citrix und OpenStack — ein Hypervisor-Wechsel ist damit ohne Neubeschaffung des Connection Brokers möglich.
+### Relevanz für die VDI-Ablösung
 
-> **Hinweis:** Die Diskussion zur 200 %-Unabhängigkeit sollte in einem eigenen Workshop geführt werden, da sie weitreichende strategische und budgetäre Konsequenzen hat.
+| Aspekt | Auswirkung |
+|--------|-----------|
+| **Kostenimpact** | Die 200 %-Strategie verdoppelt die Hardware- und Lizenzkosten. Bei den oben geschätzten TCO-Werten ist diese Verdopplung **noch nicht eingerechnet**. |
+| **Ist die Strategie noch zeitgemäß?** | Moderne VDI-Lösungen bieten Cluster- und Failover-Mechanismen (z.B. Proxmox HA-Cluster, Ceph-Replikation über Standorte), die eine vollständige 200 %-Verdopplung möglicherweise nicht mehr in vollem Umfang erfordern. |
+| **Active-Active vs. Active-Passive** | Statt 200 % Kapazität passiv vorzuhalten, kann ein Active-Active-Betrieb über zwei RZ die Gesamtkapazität besser auslasten (z.B. je 60 % Last pro RZ im Normalbetrieb, 100 % im Failover). |
+| **Differenzierte Betrachtung** | Nicht alle Workloads erfordern dieselbe Verfügbarkeit. Eine Klassifizierung in Tier 1 (geschäftskritisch, volle Redundanz) und Tier 2 (Standard, reduzierte Redundanz) kann Kosten senken. |
+
+> **Empfehlung:** Die 200 %-Kapazitätsstrategie sollte im Rahmen der VDI-Neubewertung überprüft werden. Eine differenzierte Betrachtung nach Verfügbarkeitsanforderungen und modernen HA-Mechanismen könnte die Gesamtkosten erheblich reduzieren, ohne das Verfügbarkeitsniveau zu senken.
+
+> **Hinweis:** Diese Diskussion hat weitreichende budgetäre Konsequenzen und sollte in einem eigenen Workshop mit RZ-Betrieb, IT-Sicherheit und Einkauf geführt werden.
 
 ---
 
@@ -751,7 +756,7 @@ Die Frage der „200 %-Unabhängigkeit" — also der vollständigen Herstellerun
 - [ ] Marktrecherche und -erkundung (§ 28 VgV)
 - [ ] Vergabeunterlage erstellen (funktionale Leistungsbeschreibung)
 - [ ] **Preise und Kosten mit dem Einkauf abstimmen** — aktuelle Rahmenverträge und Konditionen einbeziehen
-- [ ] **200 %-Unabhängigkeit in separatem Workshop diskutieren** — strategische Entscheidung zur Vendor-Diversifizierung
+- [ ] **200 %-Kapazitätsstrategie überprüfen** — Workshop mit RZ-Betrieb, IT-Sicherheit und Einkauf: Ist die volle Verdopplung noch nötig oder reichen moderne HA-Mechanismen?
 - [ ] Europaweite Ausschreibung (sofern Schwellenwert überschritten)
 
 ---
